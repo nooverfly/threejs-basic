@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模板</title>
+    <script src="../threejs/three.min.js"></script>
+    <style type="text/css">
+        div#canvas-frame {
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            height: 600px;
+            background-color: #EEEEEE;
+        }
+
+    </style>
+</head>
+<body onload="threeStart()">
+<div id="canvas-frame"></div>
+<script>
+    (function () {
+        var renderer, width, height;
+        function initThree() {
+            width = document.getElementById('canvas-frame').clientWidth;
+            height = document.getElementById('canvas-frame').clientHeight;
+            renderer = new THREE.WebGLRenderer({antialias: true});
+            renderer.setSize(width, height);
+            document.getElementById('canvas-frame').appendChild(renderer.domElement);
+            renderer.setClearColor(0xFFFFFF, 1.0);
+        }
+
+        var camera;
+        function initCamera() {
+            camera = new THREE.PerspectiveCamera(45, width/height,1, 10000);
+            camera.position.x = 600;
+            camera.position.y = -600;
+            camera.position.z = 600;
+            camera.up.x = 0;
+            camera.up.y = 1;//哪个坐标轴在上面
+            camera.up.z = 0;
+            camera.lookAt(new THREE.Vector3(0,0,0));
+        }
+        var scene;
+        function initScene() {
+            scene = new THREE.Scene();
+        }
+        var light;
+        function initLight() {
+            // 第二个参数是光源强度，你可以改变它试一下
+            light = new THREE.DirectionalLight(0xFF0000,1);
+            // 位置不同，方向光作用于物体的面也不同，看到的物体各个面的颜色也不一样
+            light.position.set(0,-1,0);
+            scene.add(light);
+        }
+
+        var cube;
+        function initObject() {
+            var geometry4 = new THREE.CubeGeometry( 200, 100, 50);
+            var material4 = new THREE.MeshLambertMaterial( { color:0xFFFFFF} );
+            var mesh = new THREE.Mesh( geometry4,material4);
+            mesh.position.set(0,0,0);
+            scene.add(mesh);
+
+            var geometry = new THREE.Geometry();    //几何体geometry有vertices变量，用来存放点
+            var material = new THREE.LineBasicMaterial({color: 0xFF0000});//定义线条的材质, 顶点颜色vertexColors: THREE.VertexColors
+            var p1 = new THREE.Vector3(0, 0, 0);//顶点的位置，并放到geometry中
+            var p2 = new THREE.Vector3(0, 0, 100);
+            geometry.vertices.push(p1,p2);
+            var line = new THREE.Line(geometry, material, THREE.LineSegments);
+            scene.add(line);
+
+            var geometry2 = new THREE.Geometry();    //几何体geometry有vertices变量，用来存放点
+            var material2 = new THREE.LineBasicMaterial({color: 0x00FF00});
+            var p3 = new THREE.Vector3(0, 0, 0);//顶点的位置，并放到geometry中
+            var p4 = new THREE.Vector3(0, 100, 0);
+            geometry2.vertices.push(p3,p4);
+            var line2 = new THREE.Line(geometry2, material2, THREE.LineSegments);
+            scene.add(line2);
+
+            var geometry3 = new THREE.Geometry();    //几何体geometry有vertices变量，用来存放点
+            var material3 = new THREE.LineBasicMaterial({color: 0x0000FF});
+            var p5 = new THREE.Vector3(0, 0, 0);//顶点的位置，并放到geometry中
+            var p6 = new THREE.Vector3(100, 0, 0);
+            geometry3.vertices.push(p5,p6);
+            var line3 = new THREE.Line(geometry3, material3, THREE.LineSegments);
+            scene.add(line3);
+        }
+
+        threeStart = function () {
+            initThree();
+            initCamera();
+            initScene();
+            initLight();
+            initObject();
+            renderer.clear();
+            renderer.render(scene, camera);
+        }
+    })()
+</script>
+</body>
+</html>
